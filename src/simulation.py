@@ -1,55 +1,33 @@
 import simpy
 
-
 def simulate_queue(num_servers, arrival_rate, service_rate, simulation_time):
-    """ Simula un sistema de colas con múltiples servidores.
-
-    Args:x
-        num_servers (int): Número de servidores en el sistema.
-        arrival_rate (float): Tasa de llegada de clientes.
-        service_rate (float): Tasa de servicio por servidor.
-        simulation_time (int): Tiempo total de simulación.
-
-        customers_waiting: Almacena los clientes que están esperando servicio.
-        customers_in_service: Almacena los clientes que están siendo atendidos.
-        customers_done: Almacena los clientes que han sido atendidos.
-    """
     env = simpy.Environment()
     servers = simpy.Resource(env, capacity=num_servers)
-    customers_in_service = []
-    customers_waiting = []
-    customers_done = []
+    times_in_system = []
+    server_utilization = [0] * num_servers  # Tiempo que cada servidor ha estado ocupado
 
-    def print_status():
-        print(f"Tiempo {env.now:.2f}: "
-              f"En Espera - {[c for c in customers_waiting]}, "
-              f"Atendiendo - {[c for c in customers_in_service]}, "
-              f"Ya Atendidos - {[c for c in customers_done]}")
+    def customer(env, name, servers):
+        arrival_time = env.now
+        with servers.request() as request:
+            yield request
+            start_service_time = env.now
+            yield env.timeout(1 / service_rate)
+            times_in_system.append(env.now - arrival_time)
+            server_index = servers.users.index(request)
+            server_utilization[server_index] += env.now - start_service_time
 
     def customer_arrival(env, servers):
         i = 0
         while True:
             yield env.timeout(1 / arrival_rate)
-            customer_name = f"Cliente {i}"
-            customers_waiting.append(customer_name)
-            env.process(customer_service(env, servers, customer_name))
-            print_status()
+            env.process(customer(env, f"Cliente {i}", servers))
             i += 1
-
-    def customer_service(env, servers, name):
-        with servers.request() as request:
-            yield request
-            customers_in_service.append(name)
-            customers_waiting.remove(name)  # direct removal by name
-            yield env.timeout(1 / service_rate)
-            customers_in_service.remove(name)
-            customers_done.append(name)
-            print_status()
 
     env.process(customer_arrival(env, servers))
     env.run(until=simulation_time)
 
-
-# Ejemplo de uso
-if __name__ == "__main__":
-    simulate_queue(num_servers=2, arrival_rate=1, service_rate=0.5, simulation_time=10)
+    # Calcular métricas
+    average_time_in_system = sum(times_in_system) / len(times_in_system)
+    total_service_time = sum(server_utilization)
+    utilization = total_service_time / (num_servers * simulation_time)
+    return average_time_in_system, utilization

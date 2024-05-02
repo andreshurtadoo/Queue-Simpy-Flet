@@ -1,0 +1,29 @@
+Variables de Entrada
+
+Número de Servidores (num_servers_input):
+    Descripción: Define cuántos servidores están disponibles en el sistema para atender a los clientes.
+    Valor predeterminado: 2
+    Impacto al alterar:
+        Incrementar: Aumenta la capacidad del sistema para atender a más clientes simultáneamente, lo que puede reducir el tiempo promedio que un cliente pasa en el sistema y aumentar la utilización.
+        Disminuir: Reduce la capacidad, lo que puede resultar en tiempos de espera más largos para los clientes y posiblemente una menor utilización de cada servidor si la tasa de llegada de clientes es alta.
+
+Tasa de Llegada de Clientes (arrival_rate_input):
+    Descripción: Define la frecuencia con la que los clientes llegan al sistema, medida en clientes por unidad de tiempo.
+    Valor predeterminado: 1 cliente por unidad de tiempo
+    Impacto al alterar:
+        Incrementar: Aumenta la frecuencia de llegada de nuevos clientes, lo que puede llevar a colas más largas y mayores tiempos de espera si la cantidad de servidores no es suficiente.
+        Disminuir: Reduce la frecuencia de llegada de clientes, lo que puede disminuir el tiempo de espera y reducir la carga sobre el sistema.
+
+Tasa de Servicio (service_rate_input):
+    Descripción: Define la velocidad con la que un servidor puede atender a un cliente, medida en clientes atendidos por servidor por unidad de tiempo.
+    Valor predeterminado: 0.5 clientes por unidad de tiempo
+    Impacto al alterar:
+        Incrementar: Aumenta la eficiencia de los servidores, permitiéndoles atender a clientes más rápidamente y reducir el tiempo promedio en el sistema.
+        Disminuir: Reduce la eficiencia de los servidores, aumentando el tiempo que cada cliente pasa siendo atendido y posiblemente aumentando el tiempo total en el sistema.
+
+Tiempo de Simulación (simulation_time_input):
+    Descripción: Define cuánto tiempo durará la simulación, medido en unidades de tiempo.
+    Valor predeterminado: 100 unidades de tiempo
+    Impacto al alterar:
+        Incrementar: Proporciona una vista más prolongada del comportamiento del sistema, permitiendo que las métricas se estabilicen, especialmente útil en sistemas complejos o cuando se alteran otras variables significativamente.
+        Disminuir: Limita la observación del sistema a un período más corto, lo que puede ser útil para simulaciones rápidas o pruebas preliminares.
