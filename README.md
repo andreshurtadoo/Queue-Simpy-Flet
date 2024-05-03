@@ -36,7 +36,7 @@ Muestra el tiempo promedio que un cliente pasa en el sistema y la utilización d
 
 ## Captura de la Interfaz
 
-![Captura de la Interfaz](src/capture.png)
+![Captura de la Interfaz](./src/Capture.PNG)
 
 ## Licencia
 
